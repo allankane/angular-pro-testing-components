@@ -1,4 +1,4 @@
-import { TestBed, ComponentFixture } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
@@ -54,5 +54,24 @@ describe("StockCounterComponent", () => {
       component.increment();
     }
     expect(component.value).toBe(100);
+  });
+
+  it("should not increment over the maximum value", () => {
+    const { component } = setUp();
+    component.step = 20;
+    component.max = 20;
+    component.increment();
+    component.increment();
+    expect(component.value).toBe(20);
+  });
+
+  it("should call the output on a value change", () => {
+    const { component } = setUp();
+    jest
+      .spyOn(component.changed, "emit")
+      .mockImplementation(() => Promise.resolve());
+    component.step = 100;
+    component.increment();
+    expect(component.changed.emit).toHaveBeenCalledWith(100);
   });
 });
