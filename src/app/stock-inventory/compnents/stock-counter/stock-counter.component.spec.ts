@@ -3,6 +3,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from "@angular/platform-browser-dynamic/testing";
+import { By } from "@angular/platform-browser";
 
 import { StockCounterComponent } from "./stock-counter.component";
 
@@ -21,7 +22,11 @@ describe("StockCounterComponent", () => {
   const setUp = () => {
     const fixture = TestBed.createComponent(StockCounterComponent);
     fixture.componentInstance.value = 0;
-    return { component: fixture.componentInstance };
+    return {
+      fixture,
+      component: fixture.componentInstance,
+      el: fixture.debugElement
+    };
   };
 
   it("should increment correctly", () => {
@@ -73,5 +78,25 @@ describe("StockCounterComponent", () => {
     component.step = 100;
     component.increment();
     expect(component.changed.emit).toHaveBeenCalledWith(100);
+  });
+
+  it("should increment when the + button is clicked", () => {
+    const { fixture, component, el } = setUp();
+    el.query(By.css("button:first-child")).triggerEventHandler("click", null);
+    fixture.detectChanges();
+    expect(component.value).toBe(1);
+    expect(el.query(By.css("p")).nativeElement.textContent).toBe("1");
+  });
+
+  it("should increment the value when the up arrow is pressed", () => {
+    const { fixture, component, el } = setUp();
+    const event = new Event("KeyboardEvent") as any;
+    event.code = "ArrowUp";
+    el.query(By.css(".stock-counter > div > div")).triggerEventHandler(
+      "keydown",
+      event
+    );
+    fixture.detectChanges();
+    expect(component.value).toBe(1);
   });
 });
