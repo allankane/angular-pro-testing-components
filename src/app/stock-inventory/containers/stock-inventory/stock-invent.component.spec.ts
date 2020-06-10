@@ -3,14 +3,11 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from "@angular/platform-browser-dynamic/testing";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { Observable, of } from "rxjs";
+import { of } from "rxjs";
 
 import { StockInventoryComponent } from "./stock-inventory.component";
-import { StockBranchComponent } from "../../compnents/stock-branch/stock-branch.component";
-import { StockCounterComponent } from "../../compnents/stock-counter/stock-counter.component";
-import { StockProductsComponent } from "../../compnents/stock-products/stock-products.component";
-import { StockSelectorComponent } from "../../compnents/stock-selector/stock-selector.component";
 import { StockInventoryService } from "../../services/stock-inventory.service";
 
 TestBed.initTestEnvironment(
@@ -37,13 +34,8 @@ describe("StockInventoryComponent", () => {
   beforeAll(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
-      declarations: [
-        StockInventoryComponent,
-        StockBranchComponent,
-        StockCounterComponent,
-        StockProductsComponent,
-        StockSelectorComponent
-      ],
+      declarations: [StockInventoryComponent],
+      schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: StockInventoryService, useClass: MockStockInventoryService }
       ]
